@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{% if appointment %}Edit{% else %}Add{% endif %} Appointment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">{% if appointment %}Edit{% else %}Add{% endif %} Appointment</h4>
+            </div>
+            <div class="card-body bg-dark">
+                <form method="POST" action="{% if appointment %}{{ url_for('edit_appointment', id=appointment['id']) }}{% else %}{{ url_for('add_appointment') }}{% endif %}">
+                    <div class="mb-3">
+                        <label for="provider_name" class="form-label text-white">Provider Name</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" id="provider_name" name="provider_name" 
+                               value="{% if appointment %}{{ appointment['provider_name'] }}{% endif %}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date_time" class="form-label text-white">Date & Time</label>
+                        <input type="datetime-local" class="form-control bg-dark text-white border-secondary" id="date_time" name="date_time" 
+                               value="{% if appointment and appointment['date_time_str'] %}{{ appointment['date_time_str'] }}{% endif %}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reason" class="form-label text-white">Reason</label>
+                        <textarea class="form-control bg-dark text-white border-secondary" id="reason" name="reason" rows="3">{% if appointment %}{{ appointment['reason'] }}{% endif %}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label text-white">Status</label>
+                        <select class="form-select bg-dark text-white border-secondary" id="status" name="status" required>
+                            <option value="Upcoming" {% if appointment and appointment['status'] == 'Upcoming' %}selected{% endif %}>Upcoming</option>
+                            <option value="Completed" {% if appointment and appointment['status'] == 'Completed' %}selected{% endif %}>Completed</option>
+                            <option value="Cancelled" {% if appointment and appointment['status'] == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-primary me-md-2">Save</button>
+                        <a href="{{ url_for('appointments') }}" class="btn btn-outline-light">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
